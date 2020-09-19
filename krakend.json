@@ -1,0 +1,21 @@
+{
+    "version": 2,
+    "host": ["kafka://"],
+    "extra_config": {
+      "github.com/devopsfaith/krakend-pubsub/subscriber": {
+        "subscription_url": "group?topic=mytopic"
+      },
+      "github_com/devopsfaith/krakend-gologging": {
+        "level": "ERROR",
+        "prefix": "[KRAKEND]",
+        "syslog": false,
+        "stdout": true,
+        "format": "default"
+      }
+    },
+    "timeout": "3000ms",
+    "cache_ttl": "300s",
+    "output_encoding": "json",
+    "name": "kafka-example",
+    "port": 8080
+  }
