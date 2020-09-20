@@ -36,7 +36,7 @@
         "github.com/devopsfaith/krakend/proxy": {
           "static": {
             "data": {
-              "status": "OK2"
+              "status": "OK"
             },
             "strategy": "always"
           }
