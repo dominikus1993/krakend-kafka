@@ -77,7 +77,7 @@
           "host": ["rabbit://"],
           "extra_config": {
             "github.com/devopsfaith/krakend-pubsub/publisher": {
-              "topic_url": "amqp://guest:guest@rabbitmq:5672/myexchange"
+              "subscription_url": "myexchange"
             }
           },
           "disable_host_sanitize": true

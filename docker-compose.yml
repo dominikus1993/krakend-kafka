@@ -6,11 +6,13 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      - KAFKA_BROKERS=kafka1:19092
+      - KAFKA_BROKERS=kafka:9092
+      - RABBIT_SERVER_URL=amqp://guest:guest@rabbitmq:5672
     ports:
       - 8080:8080
     depends_on:
       - kafka
+      - rabbitmq
     # volumes:
     #   - ./config:/etc/krakend
   zoo:
