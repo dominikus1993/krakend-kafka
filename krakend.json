@@ -1,10 +1,6 @@
 {
     "version": 2,
-    "host": ["kafka://"],
     "extra_config": {
-      "github.com/devopsfaith/krakend-pubsub/subscriber": {
-        "subscription_url": "group?topic=mytopic"
-      },
       "github_com/devopsfaith/krakend-gologging": {
         "level": "ERROR",
         "prefix": "[KRAKEND]",
@@ -16,6 +12,54 @@
     "timeout": "3000ms",
     "cache_ttl": "300s",
     "output_encoding": "json",
-    "name": "kafka-example",
-    "port": 8080
+    "name": "kafka-proxy",
+    "port": 8080,
+    "endpoints": [
+      {
+        "endpoint": "/events",
+        "method": "POST",
+        "extra_config": {},
+        "output_encoding": "no-op",
+        "concurrent_calls": 1,
+        "backend": [
+          {
+            "extra_config": {
+              "github.com/devopsfaith/krakend-pubsub/publisher": {
+                "topic_url": "mytopic"
+              }
+            },
+            "host": [
+              "kafka://"
+            ],
+            "disable_host_sanitize": true
+          }
+        ]
+      },
+      {
+        "endpoint": "/ping",
+        "extra_config": {
+          "github.com/devopsfaith/krakend/proxy": {
+            "static": {
+              "data": {
+                "ping": "OK"
+              },
+              "strategy": "always"
+            }
+          }
+        },
+        "backend": [
+          {
+            "url_pattern": "/",
+            "host": [
+              "http://fake-backend"
+            ],
+            "extra_config": {},
+            "encoding": "json"
+          }
+        ],
+        "output_encoding": "json",
+        "concurrent_calls": 1,
+        "method": "GET"
+      }
+    ]
   }
