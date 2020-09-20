@@ -36,7 +36,7 @@
         "github.com/devopsfaith/krakend/proxy": {
           "static": {
             "data": {
-              "status": "OK"
+              "status": "OK2"
             },
             "strategy": "always"
           }
@@ -47,7 +47,40 @@
           "url_pattern": "/",
           "host": [
             "http://fake-backend"
-          ]
+          ],
+          "extra_config": {}
+        }
+      ]
+    },
+    {
+      "endpoint": "/events",
+      "method": "POST",
+      "backend": [
+        {
+          "extra_config": {
+            "github.com/devopsfaith/krakend-pubsub/publisher": {
+              "topic_url": "kafka://test"
+            }
+          },
+          "host": [
+            "kafka://"
+          ],
+          "disable_host_sanitize": true
+        }
+      ]
+    },
+    {
+      "endpoint": "/messages",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["rabbit://"],
+          "extra_config": {
+            "github.com/devopsfaith/krakend-pubsub/publisher": {
+              "topic_url": "amqp://guest:guest@rabbitmq:5672/myexchange"
+            }
+          },
+          "disable_host_sanitize": true
         }
       ]
     }
