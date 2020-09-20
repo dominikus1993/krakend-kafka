@@ -2,30 +2,53 @@
     "version": 2,
     "extra_config": {
       "github_com/devopsfaith/krakend-gologging": {
-        "level": "ERROR",
+        "level": "WARNING",
         "prefix": "[KRAKEND]",
         "syslog": false,
         "stdout": true,
         "format": "default"
+      },
+      "github_com/devopsfaith/krakend-cors": {
+        "allow_origins": [
+          "*"
+        ],
+        "expose_headers": [
+          "Content-Length"
+        ],
+        "max_age": "12h",
+        "allow_methods": [
+          "GET",
+          "HEAD",
+          "POST",
+          "PUT",
+          "DELETE",
+          "CONNECT",
+          "OPTIONS",
+          "TRACE",
+          "PATCH"
+        ]
       }
     },
     "timeout": "3000ms",
     "cache_ttl": "300s",
     "output_encoding": "json",
-    "name": "kafka-proxy",
     "port": 8080,
+    "name": "kafka-proxy",
     "endpoints": [
       {
         "endpoint": "/events",
         "method": "POST",
-        "extra_config": {},
         "output_encoding": "no-op",
-        "concurrent_calls": 1,
+        "extra_config": {},
         "backend": [
           {
+            "url_pattern": "/",
+            "encoding": "no-op",
+            "sd": "static",
+            "method": "POST",
             "extra_config": {
               "github.com/devopsfaith/krakend-pubsub/publisher": {
-                "topic_url": "mytopic"
+                "topic_url": "test_topic"
               }
             },
             "host": [
@@ -37,29 +60,18 @@
       },
       {
         "endpoint": "/ping",
+        "method": "GET",
+        "output_encoding": "json",
         "extra_config": {
           "github.com/devopsfaith/krakend/proxy": {
             "static": {
               "data": {
-                "ping": "OK"
+                "response": "OK"
               },
               "strategy": "always"
             }
           }
-        },
-        "backend": [
-          {
-            "url_pattern": "/",
-            "host": [
-              "http://fake-backend"
-            ],
-            "extra_config": {},
-            "encoding": "json"
-          }
-        ],
-        "output_encoding": "json",
-        "concurrent_calls": 1,
-        "method": "GET"
+        }
       }
     ]
   }
